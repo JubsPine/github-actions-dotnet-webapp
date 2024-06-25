@@ -1,0 +1,30 @@
+name: Dotnet WebApp Build
+
+on:
+  push:
+    branches: ["main"]
+
+# schedule:
+#  - cron: '0,30 * * * *'
+#    displayName: Executa a cada meia hora
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: build
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Instala o .NET Core
+        uses: actions/setup-dotnet@v4.0.0 
+
+      - name: Restaura as dependências
+        run: dotnet restore **/*.csproj
+
+      - name: Compila
+        run: dotnet build **/*.csproj --no-restore
+
+      - name: Executa testes
+        run: dotnet test **/*.csproj --no-restore --verbosity normal
